@@ -10,31 +10,28 @@ import io.neow3j.wallet.Account;
 import io.neow3j.wallet.AssetTransfer;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
-public class NeoTransfer {
+public class Sample {
 
     public static void main(String[] args) throws IOException, ErrorResponseException {
         //String url = "https://seed2.switcheo.network:10331";
-        String url = "http://localhost:30333";
+        //String url = "http://localhost:30333";
 
-        Neow3j neow3j = Neow3j.build(new HttpService(url));
-
-        Account acct = Account.fromWIF("L2LGkrwiNmUAnWYb1XGd5mv7v2eDf6P4F3gHyXSrNJJR4ArmBp7Q")
-                .build();
-
+        Neow3j neow3j = Neow3j.build(new HttpService("https://node2.neocompiler.io",true));
+        Account acct = Account.fromWIF("KxDgvEKzgSBPPfuVfw67oPQBSjidEiqTHURKSDL1R7yGaGYAeYnr").build();;
         acct.updateAssetBalances(neow3j);
-
-        RawTransactionOutput output = new RawTransactionOutput(NEOAsset.HASH_ID, "1", "AdmyedL3jdw2TLvBzoUD2yU443NeKrP5t5");
-
-        AssetTransfer at = new AssetTransfer.Builder(neow3j)
+        String toAddress = "AK2nJJpJr6o664CWJKi1QRXjqeic2zRp8y";
+        RawTransactionOutput output = new RawTransactionOutput(NEOAsset.HASH_ID, "10", toAddress);
+        AssetTransfer transfer = new AssetTransfer.Builder(neow3j)
                 .account(acct)
                 .output(output)
+                .networkFee(new BigDecimal("0.1"))
                 .build()
                 .sign()
                 .send();
 
-        NeoGetAccountState neoGetTransaction = neow3j.getAccountState("AdmyedL3jdw2TLvBzoUD2yU443NeKrP5t5").send();
+        NeoGetAccountState neoGetTransaction = neow3j.getAccountState(acct.getAddress()).send();
         System.out.println("neoGetTransaction: " + neoGetTransaction.getResult().toString());
     }
-
 }

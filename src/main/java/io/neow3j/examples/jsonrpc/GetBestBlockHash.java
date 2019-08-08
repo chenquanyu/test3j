@@ -13,6 +13,7 @@ public class GetBestBlockHash {
 
         NeoGetTransaction neoGetTransaction = neow3j.getTransaction("d5a63225e419aca0c10520708c531d36d9912eef0e12cec04e29568930cc4bf9").send();
         System.out.println("Transaction (verbose=1): " + neoGetTransaction.getTransaction());
+        System.out.println("Transaction (verbose=1): " + neoGetTransaction.getRawResponse());
     }
 
 }

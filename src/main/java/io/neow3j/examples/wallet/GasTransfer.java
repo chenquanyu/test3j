@@ -3,7 +3,6 @@ package io.neow3j.examples.wallet;
 import io.neow3j.crypto.transaction.RawTransactionOutput;
 import io.neow3j.model.types.GASAsset;
 import io.neow3j.protocol.Neow3j;
-import io.neow3j.protocol.ObjectMapperFactory;
 import io.neow3j.protocol.core.methods.response.NeoGetAccountState;
 import io.neow3j.protocol.exceptions.ErrorResponseException;
 import io.neow3j.protocol.http.HttpService;
@@ -28,15 +27,15 @@ public class GasTransfer {
 
         RawTransactionOutput output = new RawTransactionOutput(GASAsset.HASH_ID, "1000", "AKeLhhHm4hEUfLWVBCYRNjio9xhGJAom5G");
 
-        AssetTransfer at = new AssetTransfer.Builder()
-                .neow3j(neow3j)
+        AssetTransfer at = new AssetTransfer.Builder(neow3j)
                 .account(acct)
                 .output(output)
                 .build()
+                .sign()
                 .send();
 
         NeoGetAccountState getAccountState = neow3j.getAccountState("AKeLhhHm4hEUfLWVBCYRNjio9xhGJAom5G").sendAsync().get();
-        System.out.println("getAccountState: " + ObjectMapperFactory.getObjectMapper(true).writeValueAsString(getAccountState));
+        System.out.println("getAccountState: " + getAccountState.getResult().toString());
     }
 
 }
