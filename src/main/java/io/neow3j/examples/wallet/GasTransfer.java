@@ -6,6 +6,7 @@ import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.core.methods.response.NeoGetAccountState;
 import io.neow3j.protocol.exceptions.ErrorResponseException;
 import io.neow3j.protocol.http.HttpService;
+import io.neow3j.transaction.ContractTransaction;
 import io.neow3j.wallet.Account;
 import io.neow3j.wallet.AssetTransfer;
 

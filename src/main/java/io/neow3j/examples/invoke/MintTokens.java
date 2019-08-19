@@ -1,15 +1,13 @@
 package io.neow3j.examples.invoke;
 
 import io.neow3j.contract.ContractInvocation;
+import io.neow3j.contract.ScriptHash;
 import io.neow3j.crypto.transaction.RawTransactionOutput;
 import io.neow3j.model.types.NEOAsset;
 import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.exceptions.ErrorResponseException;
 import io.neow3j.protocol.http.HttpService;
 import io.neow3j.transaction.InvocationTransaction;
-import io.neow3j.utils.ArrayUtils;
-import io.neow3j.utils.Keys;
-import io.neow3j.utils.Numeric;
 import io.neow3j.wallet.Account;
 
 import java.io.IOException;
@@ -25,8 +23,7 @@ public class MintTokens {
         // big-endian string
         String contractScriptString = "0xeb8dee66910af9f21caaf4d5d7fd33187666ff1f";
 
-        byte[] contractScriptHash = ArrayUtils.reverseArray(Numeric.hexStringToByteArray(contractScriptString));
-        String contractAddress = Keys.toAddress(contractScriptHash);
+        ScriptHash contractScriptHash = new ScriptHash(contractScriptString);
 
         // Instantiate your account. It will be the originator of the contract invocation.
         Account acct = Account.fromWIF("L2LGkrwiNmUAnWYb1XGd5mv7v2eDf6P4F3gHyXSrNJJR4ArmBp7Q").build();
@@ -34,12 +31,12 @@ public class MintTokens {
         // Fetch the account's balances. This is needed to pay for potential fees in the invocation.
         acct.updateAssetBalances(neow3j);
 
-        RawTransactionOutput output = new RawTransactionOutput(NEOAsset.HASH_ID, "1000", contractAddress);
+        RawTransactionOutput output = new RawTransactionOutput(NEOAsset.HASH_ID, "1000", contractScriptHash.toAddress());
 
         // Build the ContractInvocation according to your needs.
         ContractInvocation invoc = new ContractInvocation.Builder(neow3j)
                 .output(output)
-                .contractScriptHash("eb8dee66910af9f21caaf4d5d7fd33187666ff1f")
+                .contractScriptHash(contractScriptHash)
                 .account(acct)
                 .function("mintTokens")
                 // Add parameters in the correct order as they are expected by the contract.
