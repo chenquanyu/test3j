@@ -3,6 +3,8 @@ package io.neow3j.examples.invoke;
 import io.neow3j.contract.ContractInvocation;
 import io.neow3j.contract.ContractParameter;
 import io.neow3j.contract.ScriptHash;
+import io.neow3j.crypto.transaction.RawTransactionOutput;
+import io.neow3j.model.types.GASAsset;
 import io.neow3j.protocol.Neow3j;
 import io.neow3j.protocol.core.methods.response.InvocationResult;
 import io.neow3j.protocol.core.methods.response.NeoGetNep5Balances;
@@ -43,7 +45,8 @@ public class Transfer {
                 // to
                 .parameter(ContractParameter.byteArray(ScriptHash.fromAddress(toAddress).toArray()))
                 .parameter(ContractParameter.integer(100000000))
-                //.systemFee(0.1)
+                .systemFee(0.1)
+                .output(new RawTransactionOutput(GASAsset.HASH_ID, "0.01", "AKN58JdZSXvrHMHAPGnGTAs677nrN8NiaR"))
                 //.networkFee(0.1)
                 .build()
                 .sign();

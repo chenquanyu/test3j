@@ -13,25 +13,26 @@ import io.neow3j.utils.Numeric;
 import io.neow3j.wallet.Account;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.concurrent.ExecutionException;
 
 public class GasClaim {
 
     public static void main(String[] args) throws IOException, ErrorResponseException, ExecutionException, InterruptedException {
         //String url = "https://seed2.switcheo.network:10331";
-        String url = "http://localhost:30333";
+        String url = "http://seed10.ngd.network:10332";
 
-        Neow3j neow3j = Neow3j.build(new HttpService(url));
-        String adr = "AKeLhhHm4hEUfLWVBCYRNjio9xhGJAom5G";
+        Neow3j neow3j = Neow3j.build(new HttpService(url, true));
+        String adr = "AVTnRawWB4sc7zTHb8rnjo5mGrnDHkMSmf";
 
         NeoGetClaimable claimables = neow3j.getClaimable(adr).send();
         ClaimTransaction tx = ClaimTransaction.fromClaimables(claimables.getClaimables(), adr);
-        byte[] rawUnsignedTx = tx.toArray();
+        byte[] rawUnsignedTx = tx.toArrayWithoutScripts();
 
         Account account = Account.fromWIF("L2LGkrwiNmUAnWYb1XGd5mv7v2eDf6P4F3gHyXSrNJJR4ArmBp7Q")
                 .build();
 
-        ECKeyPair keyPair = account.getECKeyPair();
+        ECKeyPair keyPair =  account.getECKeyPair();
 
         // add witness
         tx.addScript(RawScript.createWitness(rawUnsignedTx, keyPair));
