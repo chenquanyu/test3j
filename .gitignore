@@ -1,0 +1,12 @@
+.project
+.classpath
+.project
+build/
+.gradle/
+.idea/
+.DS_Store
+.nb-gradle
+*.iml
+classes/
+webapps/
+out/
